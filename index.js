@@ -61,13 +61,19 @@ function formatBook(rawTableData) {
   };
 }
 
-function formatAnnotation(rawTableData, bookData) {
-  if (rawTableData && (rawTableData.ZANNOTATIONREPRESENTATIVETEXT || rawTableData.ZANNOTATIONSELECTEDTEXT)) {
-    return {
-      representativeText: rawTableData.ZANNOTATIONREPRESENTATIVETEXT,
-      selectedText: rawTableData.ZANNOTATIONSELECTEDTEXT,
-      bookId: rawTableData.ZANNOTATIONASSETID
+function formatAnnotation(bookData, rawAnnData) {
+  if (rawAnnData && (rawAnnData.ZANNOTATIONREPRESENTATIVETEXT || rawAnnData.ZANNOTATIONSELECTEDTEXT)) {
+    var annotation = {
+      representativeText: rawAnnData.ZANNOTATIONREPRESENTATIVETEXT,
+      selectedText: rawAnnData.ZANNOTATIONSELECTEDTEXT,
+      bookId: rawAnnData.ZANNOTATIONASSETID
     };
+
+    if (bookData && bookData[rawAnnData.ZANNOTATIONASSETID]) {
+      annotation.book = bookData[rawAnnData.ZANNOTATIONASSETID];
+    }
+
+    return annotation;
   }
 }
 
@@ -92,14 +98,14 @@ function getBooks(dbPath) {
   });
 }
 
-function getAnnotations(dbPath) {
+function getAnnotations(dbPath, books) {
   const ann_db = new sqlite3.Database(dbPath, sqlite3.OPEN_READONLY, handleConnect);
   return new Promise((resolve, reject) => {
     ann_db.all('SELECT zannotationassetid, zannotationrepresentativetext, zannotationselectedtext FROM zaeannotation', (err, annRows) => {
       if (err) {
         reject(err);
       } else {
-        let annotations = annRows.map(formatAnnotation);
+        let annotations = annRows.map(formatAnnotation.bind(this, books));
         // TODO: removing nulls... is this slow?
         annotations = annotations.filter(ann => !!ann);
         resolve(annotations);
@@ -116,7 +122,6 @@ function getAnnotations(dbPath) {
     const booksPath = await findBooksDbPath();
     const annotationsPath = await findAnnotationsDbPath();
     const books = await getBooks(booksPath);
-    console.log(books);
     const annotations = await getAnnotations(annotationsPath, books);
     console.log(annotations);
   } catch(e) {
