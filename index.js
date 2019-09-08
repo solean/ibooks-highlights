@@ -1,11 +1,43 @@
+const fs = require('fs');
+const glob = require('glob');
 const os = require('os');
 const sqlite3 = require('sqlite3').verbose();
 
 const homedir = os.homedir();
-// TODO: find these files automatically?
-const BOOKS_DB_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary/BKLibrary-1-091020131601.sqlite';
-const ANNOTATION_DB_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation/AEAnnotation_v10312011_1727_local.sqlite';
+const BOOKS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary';
+const ANNOTATIONS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation';
 
+
+function findFiles(startPath, filter) {
+  return new Promise((resolve, reject) => {
+    if (!fs.existsSync(startPath)) {
+      reject('Path not found: ' + startPath);
+      return;
+    }
+
+    glob(startPath + filter, {}, (err, files) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      if (!files || !files.length) {
+        reject('No such file found...');
+        return;
+      }
+
+      resolve(files[0]);
+    });
+  });
+}
+
+function findBooksDbPath() {
+  return findFiles(BOOKS_START_PATH, '/**/*.sqlite');
+}
+
+function findAnnotationsDbPath() {
+  return findFiles(ANNOTATIONS_START_PATH, '/**/*.sqlite');
+}
 
 function handleConnect(err) {
   if (err) {
@@ -81,11 +113,12 @@ function getAnnotations(dbPath) {
 
 (async function main() {
   try {
-    const books = await getBooks(BOOKS_DB_PATH);
+    const booksPath = await findBooksDbPath();
+    const annotationsPath = await findAnnotationsDbPath();
+    const books = await getBooks(booksPath);
     console.log(books);
-    const annotations = await getAnnotations(ANNOTATION_DB_PATH, books);
+    const annotations = await getAnnotations(annotationsPath, books);
     console.log(annotations);
-
   } catch(e) {
     if (e && e.message) {
       console.error(e.message);
