@@ -1,8 +1,19 @@
 {
   "name": "ibooks-highlights",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "description": "Extract highlight info from iBooks",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/solean/ibooks-highlights.git"
+  },
+  "homepage": "https://github.com/solean/ibooks-highlights",
+  "author": "Chris Schnabel",
+  "keywords": ["iBooks", "highlights"],
   "license": "MIT",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "dependencies": {
     "sqlite3": "^4.1.0"
   }
