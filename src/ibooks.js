@@ -1,20 +1,19 @@
 const os = require('os');
 const sqlite3 = require('sqlite3').verbose();
+const constants = require('./constants');
 const utils = require('./utils');
 
 const homedir = os.homedir();
-const BOOKS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary';
-const ANNOTATIONS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation';
 
 let ibooks = {};
 
 
 function findBooksDbPath() {
-  return utils.findFiles(BOOKS_START_PATH, '/**/*.sqlite');
+  return utils.findFiles(homedir + constants.BOOKS_PATH, '/**/*.sqlite');
 }
 
 function findAnnotationsDbPath() {
-  return utils.findFiles(ANNOTATIONS_START_PATH, '/**/*.sqlite');
+  return utils.findFiles(homedir + constants.ANNOTATIONS_PATH, '/**/*.sqlite');
 }
 
 function formatBook(rawTableData) {
@@ -47,7 +46,7 @@ ibooks.getBooks = async function getBooks() {
   return new Promise((resolve, reject) => {
     let books = {};
 
-    book_db.all('SELECT * from ZBKLIBRARYASSET', (err, bookRows) => {
+    book_db.all('SELECT * FROM zbklibraryasset', (err, bookRows) => {
       if (err) {
         reject(err);
       } else {
@@ -85,3 +84,4 @@ ibooks.getAnnotations = async function getAnnotations() {
 }
 
 module.exports = ibooks;
+
