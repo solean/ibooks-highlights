@@ -1,6 +1,6 @@
 {
   "name": "ibooks-highlights",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Extract highlight info from iBooks",
   "main": "index.js",
   "repository": {
