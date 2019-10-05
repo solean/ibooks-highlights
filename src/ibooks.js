@@ -5,6 +5,11 @@ const utils = require('./utils');
 
 const homedir = os.homedir();
 
+const BOOKS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary';
+const ANNOTATIONS_START_PATH = homedir + '/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation';
+const BOOKS_QUERY = 'SELECT * FROM zbklibraryasset';
+const ANNOTATIONS_QUERY = 'SELECT zannotationassetid, zannotationrepresentativetext, zannotationselectedtext, zannotationnote FROM zaeannotation';
+
 let ibooks = {};
 
 
@@ -25,10 +30,11 @@ function formatBook(rawTableData) {
 }
 
 function formatAnnotation(bookData, rawAnnData) {
-  if (rawAnnData && (rawAnnData.ZANNOTATIONREPRESENTATIVETEXT || rawAnnData.ZANNOTATIONSELECTEDTEXT)) {
+  if (rawAnnData && (rawAnnData.ZANNOTATIONREPRESENTATIVETEXT || rawAnnData.ZANNOTATIONSELECTEDTEXT || rawAnnData.ZANNOTATIONNOTE)) {
     var annotation = {
       representativeText: rawAnnData.ZANNOTATIONREPRESENTATIVETEXT,
       selectedText: rawAnnData.ZANNOTATIONSELECTEDTEXT,
+      note: rawAnnData.ZANNOTATIONNOTE,
       bookId: rawAnnData.ZANNOTATIONASSETID
     };
 
@@ -46,7 +52,7 @@ ibooks.getBooks = async function getBooks() {
   return new Promise((resolve, reject) => {
     let books = {};
 
-    book_db.all('SELECT * FROM zbklibraryasset', (err, bookRows) => {
+    book_db.all(BOOKS_QUERY, (err, bookRows) => {
       if (err) {
         reject(err);
       } else {
@@ -68,7 +74,7 @@ ibooks.getAnnotations = async function getAnnotations() {
   const books = await this.getBooks(booksPath)
   const ann_db = new sqlite3.Database(annotationsPath, sqlite3.OPEN_READONLY, utils.handleConnect);
   return new Promise((resolve, reject) => {
-    ann_db.all('SELECT zannotationassetid, zannotationrepresentativetext, zannotationselectedtext FROM zaeannotation', (err, annRows) => {
+    ann_db.all(ANNOTATIONS_QUERY, (err, annRows) => {
       if (err) {
         reject(err);
       } else {
