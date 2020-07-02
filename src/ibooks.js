@@ -30,6 +30,7 @@ function formatAnnotation(bookData, rawAnnData) {
       representativeText: rawAnnData.ZANNOTATIONREPRESENTATIVETEXT,
       selectedText: rawAnnData.ZANNOTATIONSELECTEDTEXT,
       note: rawAnnData.ZANNOTATIONNOTE,
+      chapter: rawAnnData.ZFUTUREPROOFING5,
       bookId: rawAnnData.ZANNOTATIONASSETID
     };
 

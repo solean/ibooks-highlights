@@ -1,7 +1,7 @@
 const BOOKS_PATH = '/Library/Containers/com.apple.iBooksX/Data/Documents/BKLibrary';
 const ANNOTATIONS_PATH = '/Library/Containers/com.apple.iBooksX/Data/Documents/AEAnnotation';
 const BOOKS_QUERY = 'SELECT * FROM zbklibraryasset';
-const ANNOTATIONS_QUERY = 'SELECT zannotationassetid, zannotationrepresentativetext, zannotationselectedtext, zannotationnote FROM zaeannotation'
+const ANNOTATIONS_QUERY = 'SELECT zannotationassetid, zannotationrepresentativetext, zannotationselectedtext, zannotationnote, zfutureproofing5 FROM zaeannotation'
 
 module.exports = {
   BOOKS_PATH,
