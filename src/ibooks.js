@@ -29,6 +29,8 @@ function formatAnnotation(bookData, rawAnnData) {
     var annotation = {
       representativeText: rawAnnData.ZANNOTATIONREPRESENTATIVETEXT,
       selectedText: rawAnnData.ZANNOTATIONSELECTEDTEXT,
+      createdOn: rawAnnData.CREATED_ON,
+      updatedOn: rawAnnData.UPDATED_ON,
       note: rawAnnData.ZANNOTATIONNOTE,
       chapter: rawAnnData.ZFUTUREPROOFING5,
       bookId: rawAnnData.ZANNOTATIONASSETID
