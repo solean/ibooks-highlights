@@ -33,7 +33,8 @@ function formatAnnotation(bookData, rawAnnData) {
       updatedOn: rawAnnData.UPDATED_ON,
       note: rawAnnData.ZANNOTATIONNOTE,
       chapter: rawAnnData.ZFUTUREPROOFING5,
-      bookId: rawAnnData.ZANNOTATIONASSETID
+      bookId: rawAnnData.ZANNOTATIONASSETID,
+      deleted: rawAnnData.ZANNOTATIONDELETED === 1
     };
 
     if (bookData && bookData[rawAnnData.ZANNOTATIONASSETID]) {
