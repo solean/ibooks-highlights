@@ -9,12 +9,18 @@
   },
   "homepage": "https://github.com/solean/ibooks-highlights",
   "author": "Chris Schnabel",
-  "keywords": ["iBooks", "highlights"],
+  "keywords": [
+    "iBooks",
+    "highlights"
+  ],
   "license": "MIT",
   "engines": {
     "node": ">=10.0.0"
   },
   "dependencies": {
     "sqlite3": "^4.2.0"
+  },
+  "devDependencies": {
+    "moment": "^2.29.1"
   }
 }
