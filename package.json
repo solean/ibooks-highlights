@@ -1,6 +1,6 @@
 {
   "name": "ibooks-highlights",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Extract highlight info from iBooks",
   "main": "index.js",
   "repository": {
@@ -15,6 +15,6 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^5.1.7"
   }
 }
